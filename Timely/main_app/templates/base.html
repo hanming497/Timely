@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Timely</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
@@ -17,7 +20,7 @@
                     <li><a href="/" class="left brand-logo">&nbsp;&nbsp;Timely</a></li>
                 </ul>
                 <ul class="right">
-                    <li><a href="/about">Home</a></li>
+                    <li><a href="/">Home</a></li>
                 </ul>
             </div>
         </nav>
