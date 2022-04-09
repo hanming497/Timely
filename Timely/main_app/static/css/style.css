@@ -1,14 +1,29 @@
 body {
-	display: flex;
-	min-height: 100vh;
-	flex-direction: column;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: red;
+}
+
+.login-container {
+  background-color: #CBE3EA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 968px;
+  height: 635px;
+}
+
+.navbar-fixed {
+  background-color: blue;
 }
 
 main {
-	flex: 1 0 auto;
+  flex: 1 0 auto;
+  color: blue;
 }
 
 footer.page-footer {
-	padding-top: 0;
-	text-align: right;
+  padding-top: 0;
+  text-align: right;
 }
