@@ -1,26 +1,235 @@
-body {
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: Apercu-Pro;
+  font-weight: 300;
+  src: url(fonts/ApercuPro-Regular.ttf);
+}
+
+
+@font-face {
+  font-family: Apercu-Pro-Light;
+  font-weight: 100;
+  src: url(fonts/ApercuPro-Light.ttf);
+}
+
+
+@font-face {
+  font-family: Apercu-Pro-Bold;
+  font-weight: 100;
+  src: url(fonts/ApercuPro-Bold.ttf);
+}
+
+
+html {
+  font-family: Apercu-Pro;
+}
+
+ul,
+li {
+  list-style-type: none;
+
+}
+
+h1 {
+  font-family: Apercu-Pro-Light, Helevetica, sans-serif;
+  font-weight: 100;
+}
+
+h3 {
+  font-family: Apercu-Pro-Bold, Helevetica, sans-serif;
+  font-weight: 700;
+}
+
+h4 {
+  font-family: Apercu-Pro-Light, Helevetica, sans-serif;
+  font-weight: 300;
+}
+
+h3,
+h4 {
+  font-size: 14px;
+  color: #798691;
+  letter-spacing: 0;
+  line-height: 17px;
+}
+
+a {
+  font-family: Apercu-Pro;
+  color: black;
+  text-decoration: none;
+  /* no underline */
+}
+
+.subheading,
+.subheading-white,
+.btn {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-align: center;
+  line-height: 34.31px;
+  font-size: 9.12px;
+}
+
+input[type="submit"] {
+  border: inherit;
+  cursor: pointer;
+}
+
+.btn {
+  background: #58C4F0;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.10), 0 0 5px 0 rgba(0, 0, 0, 0.20), inset 0 0 2px 0 #FFFFFF;
+}
+
+.subheading-white {
+  color: white;
+}
+
+.login-wrapper {
   display: flex;
   min-height: 100vh;
-  flex-direction: column;
-  background-color: red;
+  background-color: #CBE3EA;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  font-family: Apercu-Pro;
+  width: 205px;
+  height: 44px;
+  border-radius: 7px;
+  -webkit-appearance: none;
+  background: #58C4F0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
 }
 
 .login-container {
-  background-color: #CBE3EA;
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   width: 968px;
   height: 635px;
+  border-radius: 7px;
 }
 
-.navbar-fixed {
-  background-color: blue;
+.hero-text-wrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-text-container {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.hero-text-container h1 {
+  padding-bottom: 42px;
+  letter-spacing: 0;
+  line-height: 35px;
+}
+
+.gradient-container {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 50%;
+  height: 635px;
+  opacity: 0.9;
+  background-image: linear-gradient(-20deg, #FD8A44 0%, #D64741 55%, #7E2B59 100%);
+  border-radius: 0px 7px 7px 0px;
+}
+
+.gradient-container h1 {
+  margin-top: 40px;
+}
+
+.btn {
+  font-family: Apercu-Pro-Bold;
+  cursor: pointer;
+  outline: inherit;
+  color: white;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.10), 0 0 5px 0 rgba(0, 0, 0, 0.20), inset 0 0 2px 0 #FFFFFF;
+
+}
+
+textarea,
+input {
+  outline: none;
+  text-transform: none;
+}
+
+#email,
+#current-location {
+  font-family: Apercu-Pro;
+  display: block;
+  font-size: 18px;
+  -webkit-appearance: none;
+  width: 250px;
+  height: 45px;
+  text-align: center;
+  background: #FFFFFF;
+  border: white 2px solid;
+  color: #292A2C;
+  outline: 0;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.10), 0 0 5px 0 rgba(0, 0, 0, 0.20), inset 0 0 2px 0 #FFFFFF;
+  padding: 7px;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+}
+
+#email:focus,
+#current-location:focus {
+  border: #7E2B59 2px solid;
+  transition-delay: 0s;
+  transition-duration: 0.15s;
+  transition-property: border-color;
+  transition-timing-function: ease-in-out;
+}
+
+.signup-form input {
+  margin: 2.5%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 main {
   flex: 1 0 auto;
-  color: blue;
+  color: #292A2C;
 }
 
 footer.page-footer {
