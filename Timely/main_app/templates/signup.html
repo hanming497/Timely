@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'header.html' %}
 {% block content %}
 {% load static %}
 <!---
@@ -26,10 +26,10 @@ Add the login form
 
 --->
 <div class="login-wrapper">
-  <div class="login-container">
+  <div class="login-container fade-up">
     <div class="hero-text-wrapper">
       <img src="{% static 'img/timelylogo.svg' %}" alt="Timely logo">
-      <div class="hero-text-container">
+      <div class="hero-text-container ">
         <h1>For everything beyond local. </h1>
         <h4>See weather and localised availablity
           for collegues, business partners and <br>
@@ -61,7 +61,10 @@ Add the login form
             <option value="London">London, UK</option>
           </select>
       </div>
-      <input type="submit" class="btn" value="Let’s Go">
+      <a href="{% url 'timezones' %}">
+        <input type="submit" class="btn" value="Let’s Go">
+      </a>
+      <input type="hidden" name="next" value="{{ next }}">
       </form>
     </div>
   </div>
