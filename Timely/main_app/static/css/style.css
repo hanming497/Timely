@@ -102,7 +102,9 @@ a {
 .subheading,
 .subheading-white,
 .btn,
-#location {
+#location,
+#temperature,
+#tempFahrenheit {
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 4px;
@@ -110,6 +112,14 @@ a {
   line-height: 34.31px;
 }
 
+#temperature,
+#tempFahrenheit {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-align: left;
+  line-height: 34.31px;
+  color: #050505;
+}
 
 
 #location {
@@ -341,14 +351,18 @@ footer.page-footer {
   background-color: #CBE3EA;
 }
 
-#tempFahrenheit {
-  display: none;
+.slidecontainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#temperature,
+.slidecontainer img {
+  padding: 5px;
+}
+
 #tempFahrenheit {
-  font-size: 3em;
-  font-weight: 400;
+  display: none;
 }
 
 #temperature .snow,
@@ -362,8 +376,15 @@ footer.page-footer {
 .temp-f,
 .temp-c,
 .currenttimezone {
-  font-size: .5em;
+  font-size: 10.25px;
   font-weight: 200;
+}
+
+#weathercondition {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -704,6 +725,14 @@ section:nth-of-type(59) {
 
 section:nth-of-type(60) {
   transform: rotateZ(calc(6deg * 60));
+}
+
+hr {
+  width: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 2px;
+  background-color: #2C3E50;
 }
 
 @-webkit-keyframes time {

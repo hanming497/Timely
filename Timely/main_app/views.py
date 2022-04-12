@@ -5,8 +5,7 @@ import requests
 
 from .models import Timezones
 from .models import City
-
-from main_app.forms import CityForm
+from .forms import CityForm
 
 # Add the following import
 
@@ -49,24 +48,60 @@ def weather(request):
     form = CityForm()
 
     weather_data = []
+    feels_like_data = []
 
     for city in cities:
 
         # request the API data and convert the JSON to Python data types
         city_weather = requests.get(url.format(city)).json()
 
-        print(city_weather)
-
         weather = {
             'city': city,
+            # 'country': city_weather['sys'][0]['country'],
             'temperature': city_weather['main']['temp'],
-            'description': city_weather['weather'][0]['description'],
+            'feels_like': round(city_weather['main']['feels_like']),
+            'temperature_rounded': round(city_weather['main']['temp']),
+            'description': city_weather['weather'][0]['main'],
             'icon': city_weather['weather'][0]['icon']
         }
 
-        # add the data for the current city into our list
-        weather_data.append(weather)
+        """
+        temperature_comparison = round(city_weather['main']['temp'])
+        feels_like_comparison = round(city_weather['main']['feels_like'])
 
-    context = {'weather_data': weather_data}
+        feels_like = {
+            'Feels cooler': temperature_comparison > feels_like_comparison,
+            'Feels warmer': temperature_comparison < feels_like_comparison,
+            'Feels similar': temperature_comparison == feels_like_comparison
+        }
 
-    return render(request, 'weather.html', context)
+        print(feels_like)
+
+        if temperature_comparison == feels_like_comparison:
+            feels_like_data.append('Feels similar')
+        elif temperature_comparison > feels_like_comparison:
+            feels_like_data.append('Feels cooler')
+        elif temperature_comparison < feels_like_comparison:
+            feels_like_data.append('Feels warmer').join(map(str, s))
+
+
+        feels_like = {
+            'Feels cooler': 'temperature_rounded' > 'feels_like',
+            'Feels warmer': 'temperature_rounded' < 'feels_like',
+            'Feels similar': 'temperature_rounded' == 'feels_like'
+        }
+
+        print(feels_like)
+        print(weather)
+        """
+
+    # add the data for the current city into our list
+        weather_data.append(weather),
+        # feels_like_data.append(feels_like)
+
+    context = {
+        'weather_data': weather_data,
+        'feels_like': feels_like_data
+    }
+
+    return render(request, 'timezones.html', context)
