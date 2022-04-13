@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
-#super user is: han, han@han.com, han123HAN
+# super user is: han, han@han.com, han123HAN
+
 
 class Timezones(models.Model):
     timezone = models.ForeignKey(

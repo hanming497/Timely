@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import requests
+from django.urls.base import reverse
 from datetime import datetime, timedelta
 
 from .models import Timezones
@@ -19,13 +21,14 @@ def home(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    return render(request, 'registration/signup.html')
 
 
 def login(request):
-    return render(request, 'login.html')
+    return render(request, 'registration/login.html')
 
 
+@login_required
 def timezones(request):
     return render(request, 'timezones.html', {'timezones': timezones})
 
@@ -34,6 +37,12 @@ class TimezonesCreate(CreateView):
     model = Timezones
     fields = ['timezone', 'availability_start_time', 'availability_end_time']
     success_url = '/timezones/'
+
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = self.request.user  # form.instance is the cat
+    # Let the CreateView do its job as usual
+        return super().form_valid(form)
 
 
 def weather(request):

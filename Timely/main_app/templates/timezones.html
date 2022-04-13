@@ -1,9 +1,7 @@
 {% extends 'header.html' %}
 {% block content %}
 {% load static %}
-<div class="container">
-
-</div>
+{% if user.is_authenticated %}
 <div class="timezone-wrapper">
     <div class="nav-container">
         <img src="{% static 'img/timelylogo-sideways.svg' %}" alt="Timely logo">
@@ -13,40 +11,62 @@
             <img src="{% static 'img/crescent-moon.svg' %}" alt="Crescent Moon">
             <h3>NOW</h3>
         </div>
+
+
         <div class="settings">
             <h3>EDIT</h3>
             <hr class="rotated">
             <a href="settings">
                 <img src="{% static 'img/cog.svg' %}" alt="Settings Cog">
             </a>
-
+            <hr class="rotated">
+            <a href="{% url 'logout' %}">
+                <img class="logout" src="{% static 'img/logout.svg' %}" alt="Logout">
+            </a>
         </div>
     </div>
 
-    <div class="timezone-tile-container">
+    {% for weather in weather_data %}
 
-        {% for weather in weather_data %}
-
-        <div class="tile tile-weather">
-            <div class="timezone-content">
-                <div id="location">{{ weather.city }}, {{ weather.country }}</div>
-                <div id="user-time">
-                    <h1 class="localtime">{{weather.timezone}}</h1>
-                    <h1>Alexander</h1>
-                </div>
-                <div class="weather-content">
-                    <div id="feelslike">Feels colder</div>
-                    <!--{{feels_like}}-->
-                    <div id="weathercondition">
-                        <div id="temperature">{{ weather.temperature_rounded }}°C</div>
-                        <div id="tempFahrenheit"></div>
-                        <hr>
-                        <div id="temperaturecondition">{{ weather.description }}</div>
-                    </div>
+    <div class="tile tile-weather">
+        <div class="timezone-content">
+            <div id="location">{{ weather.city }}, {{ weather.country }}</div>
+            <div id="user-time">
+                <h1 class="localtime">{{weather.timezone}}</h1>
+                <h1>Alexander</h1>
+            </div>
+            <div class="weather-content">
+                <div id="feelslike">Feels colder</div>
+                <!--{{feels_like}}-->
+                <div id="weathercondition">
+                    <div id="temperature">{{ weather.temperature_rounded }}°C</div>
+                    <div id="tempFahrenheit"></div>
+                    <hr>
+                    <div id="temperaturecondition">{{ weather.description }}</div>
                 </div>
             </div>
         </div>
+    </div>
+    {% empty %}
+    <div class="timezone-tile-container">
+        <a href="{% url 'timezones_create' %}">
+            <div class="tile tile-add-timezone">
+                <div class="timezone-content">
+                    <div id="empty_timezone">
+
+                        <h3 class="subheading">ADD A PERSON’S <br>TIMEZONE <br>AND
+                            AVAILABILITY</h3>
+
+                    </div>
+                </div>
+            </div>
+        </a>
         {% endfor %}
     </div>
+
+    {% else %}
+    <li><a href="{% url 'login' %}">Log In</a></li>
+    {% endif %}
+</div>
 </div>
 {% endblock %}
