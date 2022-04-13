@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import requests
 from django.urls.base import reverse
+from datetime import datetime, timedelta
+
 from .models import Timezones
 from .models import City
 from .forms import CityForm
@@ -18,9 +21,14 @@ def home(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    return render(request, 'registration/signup.html')
 
 
+def login(request):
+    return render(request, 'registration/login.html')
+
+
+@login_required
 def timezones(request):
     return render(request, 'timezones.html', {'timezones': timezones})
 
@@ -29,11 +37,13 @@ class TimezonesCreate(CreateView):
     model = Timezones
     fields = ['timezone', 'availability_start_time', 'availability_end_time']
     success_url = '/timezones/'
+
     def form_valid(self, form):
-    # Assign the logged in user (self.request.user)
+        # Assign the logged in user (self.request.user)
         form.instance.user = self.request.user  # form.instance is the cat
     # Let the CreateView do its job as usual
         return super().form_valid(form)
+
 
 def weather(request):
 
@@ -56,18 +66,27 @@ def weather(request):
 
     for city in cities:
 
+        """   def get_date(timezone):
+              tz = datetime.timezone(datetime.timedelta(seconds=int(timezone)))
+              # strftime is just for visually formatting the datetime object
+              localtime = datetime.datetime.now(tz=tz).strftime("%m/%d/%Y, %H:%M:%S") """
         # request the API data and convert the JSON to Python data types
         city_weather = requests.get(url.format(city)).json()
 
         weather = {
             'city': city,
-            # 'country': city_weather['sys'][0]['country'],
+            'country': city_weather['sys']['country'],
             'temperature': city_weather['main']['temp'],
             'feels_like': round(city_weather['main']['feels_like']),
             'temperature_rounded': round(city_weather['main']['temp']),
             'description': city_weather['weather'][0]['main'],
+            'timezone': (datetime.now() - timedelta(hours=((city_weather['timezone']/3600)))).strftime("%H:%M"),
             'icon': city_weather['weather'][0]['icon']
         }
+
+        print(city_weather)
+
+        # pip install tzlocal
 
         """
         temperature_comparison = round(city_weather['main']['temp'])
@@ -96,8 +115,9 @@ def weather(request):
         }
 
         print(feels_like)
-        print(weather)
+
         """
+        print(weather)
 
     # add the data for the current city into our list
         weather_data.append(weather),
