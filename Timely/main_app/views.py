@@ -5,7 +5,7 @@ from django.http import HttpResponse
 import requests
 from django.urls.base import reverse
 from datetime import datetime, timedelta
-
+from django.contrib.auth.decorators import login_required
 from .models import Timezones
 from .models import City
 from .forms import CityForm
@@ -44,7 +44,7 @@ class TimezonesCreate(CreateView):
     # Let the CreateView do its job as usual
         return super().form_valid(form)
 
-
+@login_required
 def weather(request):
 
     # Enter your API key here
