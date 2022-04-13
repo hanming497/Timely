@@ -1,0 +1,47 @@
+{% extends 'header.html' %}
+{% block content %}
+{% load static %}
+<div class="login-wrapper">
+  <div class="login-container fade-up">
+    <div class="hero-text-wrapper">
+      <img src="{% static 'img/timelylogo.svg' %}" alt="Timely logo">
+      <div class="hero-text-container ">
+        <h1>For everything beyond local. </h1>
+        <h4>See weather and localised availablity
+          for collegues, business partners and <br>
+          loved ones. All at a glance. </h4>
+      </div>
+      <div class="existing-user">
+        <li class="subheading"><a href="{% url 'login' %}">Existing User?</a></li>
+      </div>
+    </div>
+    <div class="gradient-container">
+      <h1>Let’s begin</h1>
+      <div class="signup-form">
+
+
+        {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+
+        <!-- Add the login form -->
+        <form method="post" action="{% url 'signup' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <h3 class="subheading-white">Your Email</h3>
+          <input type="email" required id="email">
+          <h3 class="subheading-white">Current Location</h3>
+          <!--<input type="text" required id="current-location">-->
+          <select id="current-location" name="city">
+            <option value="Victoria">Victoria, BC</option>
+            <option value="Calgary">Calgary, AB</option>
+            <option value="Toronto">Toronto, ON</option>
+            <option value="London">London, UK</option>
+          </select>
+      </div>
+      <input type="submit" class="btn" value="signup">
+      <input type="hidden" name="next" value="{{ next }}">
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
