@@ -44,6 +44,7 @@ class TimezonesCreate(CreateView):
     # Let the CreateView do its job as usual
         return super().form_valid(form)
 
+
 @login_required
 def weather(request):
 
@@ -86,8 +87,6 @@ def weather(request):
 
         print(city_weather)
 
-        # pip install tzlocal
-
         """
         temperature_comparison = round(city_weather['main']['temp'])
         feels_like_comparison = round(city_weather['main']['feels_like'])
@@ -105,7 +104,7 @@ def weather(request):
         elif temperature_comparison > feels_like_comparison:
             feels_like_data.append('Feels cooler')
         elif temperature_comparison < feels_like_comparison:
-            feels_like_data.append('Feels warmer').join(map(str, s))
+            feels_like_data.append('Feels warmer')
 
 
         feels_like = {

@@ -28,7 +28,7 @@
 
     <div class="timezone-tile-container">
         {% for weather in weather_data %}
-        {% if weather.city|length >= 4 %}
+        {% if forloop.counter == 4 %}
         <div class="tile tile-weather">
             <div class="timezone-content">
                 <div id="location">{{ weather.city }}, {{ weather.country }}</div>
@@ -48,7 +48,28 @@
                 </div>
             </div>
         </div>
-        {% else %}
+        {% endif %}
+        {% if forloop.counter <= 3 %} <div class="tile tile-weather">
+            <div class="timezone-content">
+                <div id="location">{{ weather.city }}, {{ weather.country }}</div>
+                <div id="user-time">
+                    <h1 class="localtime">{{weather.timezone}}</h1>
+                    <h1>Alexander</h1>
+                </div>
+                <div class="weather-content">
+                    <div id="feelslike">Feels colder</div>
+                    <!--{{feels_like}}-->
+                    <div id="weathercondition">
+                        <div id="temperature">{{ weather.temperature_rounded }}°C</div>
+                        <div id="tempFahrenheit"></div>
+                        <hr>
+                        <div id="temperaturecondition">{{ weather.description }}</div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.last %}
+    </div>
+    <a href="{% url 'timezones_create' %}">
         <div class="tile tile-add-timezone">
             <div class="timezone-content">
                 <div id="empty_timezone">
@@ -59,9 +80,25 @@
                 </div>
             </div>
         </div>
-        {% endif %}
-        {% endfor %}
+    </a>
+    {%endif%}
+</div>
+{% endif %}
+{% empty %}
+<a href="{% url 'timezones_create' %}">
+    <div class="tile tile-add-timezone">
+        <div class="timezone-content">
+            <div id="empty_timezone">
+
+                <h3 class="subheading">ADD A PERSON’S <br>TIMEZONE <br>AND
+                    AVAILABILITY</h3>
+
+            </div>
+        </div>
     </div>
+</a>
+{% endfor %}
+</div>
 </div>
 
 {% else %}
