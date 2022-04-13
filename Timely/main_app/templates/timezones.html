@@ -15,6 +15,7 @@
         </div>
         <div class="settings">
             <h3>EDIT</h3>
+            <hr class="rotated">
             <a href="settings">
                 <img src="{% static 'img/cog.svg' %}" alt="Settings Cog">
             </a>
@@ -27,36 +28,21 @@
         {% for weather in weather_data %}
 
         <div class="tile tile-weather">
-            <div class="weather-content">
-                <div id="city"></div>
-                <div id="location">{{ weather.city }}</div>
-                <div>
-
-
-
+            <div class="timezone-content">
+                <div id="location">{{ weather.city }}, {{ weather.country }}</div>
+                <div id="user-time">
+                    <h1 class="localtime">{{weather.timezone}}</h1>
+                    <h1>Alexander</h1>
                 </div>
-
-                <svg width="24px" height="2px" viewBox="0 0 24 2" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <g id="Page-1" stroke="#2C3E50" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0">
-                        <g id="Main-Page-(Edit-Page)" transform="translate(-206.000000, -691.000000)" fill="#000000"
-                            stroke="#2C3E50">
-                            <g id="Group-56" transform="translate(170.000000, 680.639025)">
-                                <path d="" id="Shape-2"></path>
-                            </g>
-                        </g>
-                    </g>
-                </svg>
-
-                <span id="feelslike">Feels Cooler</span>
-                <div id="weathercondition">
-
-                    <div id="temperature">{{ weather.temperature_rounded }}°C</div>
-                    <div id="tempFahrenheit"></div>
-                    <hr style="border: none;">
-                    <div id="temperaturecondition">{{ weather.description }}</div>
-
-
+                <div class="weather-content">
+                    <div id="feelslike">Feels colder</div>
+                    <!--{{feels_like}}-->
+                    <div id="weathercondition">
+                        <div id="temperature">{{ weather.temperature_rounded }}°C</div>
+                        <div id="tempFahrenheit"></div>
+                        <hr>
+                        <div id="temperaturecondition">{{ weather.description }}</div>
+                    </div>
                 </div>
             </div>
         </div>
