@@ -7,7 +7,8 @@
         <img src="{% static 'img/timelylogo-sideways.svg' %}" alt="Timely logo">
         <div class="slidecontainer">
             <img src="{% static 'img/sun.svg' %}" alt="Timely logo">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            <input type="range" min="0" max={{sunrise_sundown.0}} value={{sunrise_sundown.1}} class="slider"
+                id="myRange">
             <img src="{% static 'img/crescent-moon.svg' %}" alt="Crescent Moon">
             <h3>NOW</h3>
         </div>

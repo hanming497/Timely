@@ -53,6 +53,7 @@ def timezones(request):
     city_data = []
     start_data = []
     end_data = []
+    sunrise_sundown_data = [100,50]
 
     for timezone in timezones:
         timezones_arr = str(timezone).split('-')
@@ -66,6 +67,8 @@ def timezones(request):
 
         # request the API data and convert the JSON to Python data types
         city_weather = requests.get(url.format(city)).json()
+        print(city_weather)
+
 
         data_object = {
             'city': city,
@@ -96,8 +99,27 @@ def timezones(request):
         timezones_dto_data.append(data_object),
  
 
+    #for sunrise and sundown progressbar
+    #if timezones_data is not empty
+
+    if timezones_data:    
+        city_weather = requests.get(url.format(city_data[0])).json()
+        sr = pendulum.from_timestamp(city_weather['sys']['sunrise'], tz=timezones_data[0])
+        
+        sd = pendulum.from_timestamp(city_weather['sys']['sunset'], tz=timezones_data[0])
+        
+        curr = pendulum.now(timezones_data[0])
+        total_diff = sd.diff(sr).in_hours()
+        current_diff = sr.diff(curr).in_hours()
+        sunrise_sundown_data[0]=total_diff
+        sunrise_sundown_data[1]=current_diff
+
+
+    #creating timezoneDTO
+
     timezoneDTO = {
         'timezones': timezones_dto_data,
+        'sunrise_sundown': sunrise_sundown_data,
     }
 
     return render(request, 'timezones.html', timezoneDTO)
