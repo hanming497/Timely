@@ -27,23 +27,27 @@
     </div>
 
     <div class="timezone-tile-container">
-        {% for weather in weather_data %}
+        {% for timezone in timezones %}
         {% if forloop.counter == 4 %}
         <div class="tile tile-weather">
             <div class="timezone-content">
-                <div id="location">{{ weather.city }}, {{ weather.country }}</div>
+                <div id="location">{{ timezone.city }}, {{ timezone.country }}
+
+                </div>
                 <div id="user-time">
-                    <h1 class="localtime">{{weather.timezone}}</h1>
-                    <h1>Alexander</h1>
+                    <h1 class="localtime">{{timezone.time}}</h1>
+                    <h1>{{timezone.name}}</h1>
                 </div>
                 <div class="weather-content">
-                    <div id="feelslike">Feels colder</div>
-                    <!--{{feels_like}}-->
+
+
                     <div id="weathercondition">
-                        <div id="temperature">{{ weather.temperature_rounded }}°C</div>
+                        <div id="temperature">{{ timezone.temperature_rounded }}°C</div>
                         <div id="tempFahrenheit"></div>
                         <hr>
-                        <div id="temperaturecondition">{{ weather.description }}</div>
+                        <div id="temperaturecondition">{{ timezone.description }}</div>
+                    </div>
+                    <div id="feelslike">{{timezone.feels_like}}
                     </div>
                 </div>
             </div>
@@ -51,20 +55,21 @@
         {% endif %}
         {% if forloop.counter <= 3 %} <div class="tile tile-weather">
             <div class="timezone-content">
-                <div id="location">{{ weather.city }}, {{ weather.country }}</div>
+                <div id="location">{{ timezone.city }}, {{ timezone.country }}</div>
                 <div id="user-time">
-                    <h1 class="localtime">{{weather.timezone}}</h1>
-                    <h1>Alexander</h1>
+                    <h1 class="localtime">{{timezone.time}}</h1>
+                    <h1>{{timezone.name}}</h1>
                 </div>
                 <div class="weather-content">
-                    <div id="feelslike">Feels colder</div>
-                    <!--{{feels_like}}-->
+
+
                     <div id="weathercondition">
-                        <div id="temperature">{{ weather.temperature_rounded }}°C</div>
+                        <div id="temperature">{{ timezone.temperature_rounded }}°C</div>
                         <div id="tempFahrenheit"></div>
                         <hr>
-                        <div id="temperaturecondition">{{ weather.description }}</div>
+                        <div id="temperaturecondition">{{ timezone.description }}</div>
                     </div>
+                    <div id="feelslike">{{timezone.feels_like}}</div>
                 </div>
             </div>
             {% if forloop.last %}

@@ -6,10 +6,9 @@ import requests
 from django.urls.base import reverse
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
-from .models import Timezones
-from .models import City
+from .models import *
 from .forms import CityForm
-
+import pendulum
 # Add the following import
 
 
@@ -30,12 +29,84 @@ def login(request):
 
 @login_required
 def timezones(request):
-    return render(request, 'timezones.html', {'timezones': timezones})
+    timezones = Timezones.objects.all() #returns all timezones 
+
+
+    # Enter your API key here
+    api_key = "ea43d349fe09f49a0d21b5607b77208c"
+
+    url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=" + api_key
+
+    
+
+    if request.method == 'POST':  # only true if form is submitted
+        # add actual request data to form for processing
+        form = CityForm(request.POST)
+        form.save()  # will validate and save if validate
+
+    form = CityForm()
+
+    timezones_dto_data = []
+
+    timezones_data = []
+    name_data = []
+    city_data = []
+    start_data = []
+    end_data = []
+
+    for timezone in timezones:
+        timezones_arr = str(timezone).split('-')
+        name_data.append("".join(timezones_arr[0].split()))
+        timezones_data.append("".join(timezones_arr[1].split()))
+        city_data.append(timezones_arr[2])
+        start_data.append("".join(timezones_arr[3].split()))
+        end_data.append("".join(timezones_arr[4].split()))
+
+    for i,city in enumerate(city_data):
+
+        # request the API data and convert the JSON to Python data types
+        city_weather = requests.get(url.format(city)).json()
+
+        data_object = {
+            'city': city,
+            'country': city_weather['sys']['country'],
+            'temperature': city_weather['main']['temp'],
+            'feels_like': '',
+            'temperature_rounded': round(city_weather['main']['temp']),
+            'description': city_weather['weather'][0]['main'],
+            'time': (pendulum.now(timezones_data[i])).strftime("%H:%M"),
+            'icon': city_weather['weather'][0]['icon'],
+            'name': name_data[i],
+            'start_time': start_data[i],
+            'end_time': end_data[i],
+        }
+        
+        temperature_comparison = round(city_weather['main']['temp'])
+        feels_like_comparison = round(city_weather['main']['feels_like'])
+
+        if temperature_comparison == feels_like_comparison:
+            data_object['feels_like'] = 'Feels similar to ' + str(temperature_comparison)
+        elif temperature_comparison > feels_like_comparison:
+            data_object['feels_like'] =  'Feels cooler than ' + str(temperature_comparison)
+        elif temperature_comparison < feels_like_comparison:
+            data_object['feels_like'] = 'Feels warmer than '  + str(temperature_comparison)
+        
+        
+
+        timezones_dto_data.append(data_object),
+ 
+
+    timezoneDTO = {
+        'timezones': timezones_dto_data,
+    }
+
+    return render(request, 'timezones.html', timezoneDTO)
+
 
 
 class TimezonesCreate(CreateView):
     model = Timezones
-    fields = ['timezone', 'availability_start_time', 'availability_end_time']
+    fields = ['timezone', 'availability_start_time', 'availability_end_time', 'name', 'city']
     success_url = '/timezones/'
 
     def form_valid(self, form):
@@ -45,86 +116,10 @@ class TimezonesCreate(CreateView):
         return super().form_valid(form)
 
 
-@login_required
-def weather(request):
-
-    # Enter your API key here
-    api_key = "ea43d349fe09f49a0d21b5607b77208c"
-
-    url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=" + api_key
-
-    cities = City.objects.all()  # return all the cities in the database
-
-    if request.method == 'POST':  # only true if form is submitted
-        # add actual request data to form for processing
-        form = CityForm(request.POST)
-        form.save()  # will validate and save if validate
-
-    form = CityForm()
-
-    weather_data = []
-    feels_like_data = []
-
-    for city in cities:
-
-        """   def get_date(timezone):
-              tz = datetime.timezone(datetime.timedelta(seconds=int(timezone)))
-              # strftime is just for visually formatting the datetime object
-              localtime = datetime.datetime.now(tz=tz).strftime("%m/%d/%Y, %H:%M:%S") """
-        # request the API data and convert the JSON to Python data types
-        city_weather = requests.get(url.format(city)).json()
-
-        weather = {
-            'city': city,
-            'country': city_weather['sys']['country'],
-            'temperature': city_weather['main']['temp'],
-            'feels_like': round(city_weather['main']['feels_like']),
-            'temperature_rounded': round(city_weather['main']['temp']),
-            'description': city_weather['weather'][0]['main'],
-            'timezone': (datetime.now() - timedelta(hours=((city_weather['timezone']/3600)))).strftime("%H:%M"),
-            'icon': city_weather['weather'][0]['icon']
-        }
-
-        print(city_weather)
-
-        """
-        temperature_comparison = round(city_weather['main']['temp'])
-        feels_like_comparison = round(city_weather['main']['feels_like'])
-
-        feels_like = {
-            'Feels cooler': temperature_comparison > feels_like_comparison,
-            'Feels warmer': temperature_comparison < feels_like_comparison,
-            'Feels similar': temperature_comparison == feels_like_comparison
-        }
-
-        print(feels_like)
-
-        if temperature_comparison == feels_like_comparison:
-            feels_like_data.append('Feels similar')
-        elif temperature_comparison > feels_like_comparison:
-            feels_like_data.append('Feels cooler')
-        elif temperature_comparison < feels_like_comparison:
-            feels_like_data.append('Feels warmer')
 
 
-        feels_like = {
-            'Feels cooler': 'temperature_rounded' > 'feels_like',
-            'Feels warmer': 'temperature_rounded' < 'feels_like',
-            'Feels similar': 'temperature_rounded' == 'feels_like'
-        }
 
-        print(feels_like)
 
-        """
-        print(weather)
 
-    # add the data for the current city into our list
-        weather_data.append(weather),
-        # feels_like_data.append(feels_like)
 
-    context = {
-        'weather_data': weather_data,
-        'feels_like': feels_like_data
-    }
 
-    return render(request, 'timezones.html', context)

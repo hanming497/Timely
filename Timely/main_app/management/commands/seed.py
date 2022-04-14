@@ -47,11 +47,17 @@ def seed_countries():
 def clear_countries():
     Country.objects.all().delete()
 
+
+def clear_timezones_table():
+    Timezones.objects.all().delete()
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         
         clear_timezones()
         clear_countries()
+        clear_timezones_table()
         print("cleared previous data")
         seed_timezones()
         print("completed timezones")
