@@ -11,7 +11,8 @@ class Timezones(models.Model):
     availability_start_time = models.CharField(max_length=100, default='00:00')
     availability_end_time = models.CharField(max_length=100, default='23:59')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    city = models.ForeignKey('City', on_delete=models.CASCADE, null=True)
+    city = models.CharField(max_length=100)
+    country = models.ForeignKey('Country', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100)
     
     def __str__(self):
@@ -40,3 +41,6 @@ class Country(models.Model):
     country_name = models.CharField(max_length=100)
     country_short_name = models.CharField(max_length=100)
     country_phone_code = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.country_name

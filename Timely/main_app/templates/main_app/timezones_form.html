@@ -1,14 +1,140 @@
-{% extends 'header.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<!-- Leaving the action empty makes the form post to the same url used to display it -->
-<form action="" method="post">
-    <!-- Django requires the following for security purposes -->
-    {% csrf_token %}
-    <table>
-        <!-- Render the inputs inside of <tr>s & <td>s -->
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit!" class="btn">
-</form>
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Timely</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+</head>
+
+<body>
+    <main class="container">
+        <form action="" method="post">
+            <!-- Django requires the following for security purposes -->
+            {% csrf_token %}
+            <!--Basically, i started trying to make api calls to get country -> state -> city. This works decently well, except the API i am currently hitting does not support states that have spaces in them. -->
+            <!-- <table>
+                <tr>
+                    <td>Country: </td>
+                    <td><select name="countries_select" id="countries_select" onchange="getStates(this.value);">
+
+                            {% for country in country_list %}
+                            <option value="{{ country.country_name }}">{{ country.country_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>State/Province</td>
+                    <td> <select name="states_select" id="states_select" onchange="getCities(this.value);">
+
+                        </select></td>
+
+
+
+
+
+                </tr>
+                <tr>
+                    <td>City</td>
+                    <td> <select name="city" id="city_select">
+
+                        </select></td>
+
+                </tr>
+
+            </table> -->
+
+
+            <table>
+                <!-- Render the inputs inside of <tr>s & <td>s -->
+                {{ form.as_table }}
+            </table>
+
+
+
+            <input type="submit" value="Submit!" class="btn">
+        </form>
+    </main>
+    <footer class="page-footer">
+        <h3 class="right">All Rights Reserved. &copy; 2022 Timely &nbsp;</h3>
+    </footer>
+</body>
+
+</html>
+
+
+<script defer>
+
+    async function getToken(url = 'https://www.universal-tutorial.com/api/getaccesstoken') {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                "Accept": "application/json",
+                "api-token": "QZX-86Feq0Pkxbk0VRntPOaq7uS58qkEq1Iym7aMAAINRrDi1i8k6P6SMDAebSw3cbs",
+                "user-email": "hanming497@gmail.com"
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+
+        });
+        return response.json();
+    }
+
+    async function getStates(country) {
+        const auth = await getToken();
+        url = 'https://www.universal-tutorial.com/api/states/' + country;
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                "Authorization": "Bearer " + auth['auth_token'],
+                "Accept": "application/json"
+            }
+
+        });
+
+        const data = await response.json();
+
+
+        var test = document.getElementById("states_select")
+
+        //remove options if necessary
+        for (var i = test.options.length - 1; i >= 0; i--) { test.remove(i); }
+        //add new options
+        for (i in data) { test.add(new Option(data[i].state_name, data[i].state_name)); }
+
+    }
+
+    async function getCities(state) {
+
+
+        stateStripped = encodeURI(state);
+        console.log(stateStripped);
+        const auth = await getToken();
+        url = 'https://www.universal-tutorial.com/api/cities/' + stateStripped;
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                "Authorization": "Bearer " + auth['auth_token'],
+                "Accept": "application/json"
+            }
+
+        });
+        console.log(response)
+        const data = await response.json();
+
+        console.log(data)
+        var test = document.getElementById("id_city")
+
+        //remove options if necessary
+        for (var i = test.options.length - 1; i >= 0; i--) { test.remove(i); }
+        //add new options
+        for (i in data) { test.add(new Option(data[i].city_name, data[i].city_name)); }
+
+    }
+
+
+</script>

@@ -31,6 +31,7 @@
         {% for timezone in timezones %}
         {% if forloop.counter == 4 %}
         <div class="tile tile-weather">
+            <a href="{% url 'timezones_delete' timezone.id %}">X</a>
             <div class="timezone-content">
                 <div id="location">{{ timezone.city }}, {{ timezone.country }}
 
@@ -55,6 +56,7 @@
         </div>
         {% endif %}
         {% if forloop.counter <= 3 %} <div class="tile tile-weather">
+            <a href="{% url 'timezones_delete' timezone.id %}">X</a>
             <div class="timezone-content">
                 <div id="location">{{ timezone.city }}, {{ timezone.country }}</div>
                 <div id="user-time">

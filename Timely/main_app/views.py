@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import requests
 from django.urls.base import reverse
-from datetime import datetime, timedelta
+
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import CityForm
@@ -51,9 +51,11 @@ def timezones(request):
     timezones_data = []
     name_data = []
     city_data = []
+    country_code = []
     start_data = []
     end_data = []
     sunrise_sundown_data = [100,50]
+    timezones_id = []
 
     for timezone in timezones:
         timezones_arr = str(timezone).split('-')
@@ -62,12 +64,14 @@ def timezones(request):
         city_data.append(timezones_arr[2])
         start_data.append("".join(timezones_arr[3].split()))
         end_data.append("".join(timezones_arr[4].split()))
+        timezones_id.append(timezone.id)
+        country_code.append(timezone.country.country_short_name)
 
     for i,city in enumerate(city_data):
 
         # request the API data and convert the JSON to Python data types
-        city_weather = requests.get(url.format(city)).json()
-        print(city_weather)
+        city_weather = requests.get(url.format(city, country_code[i])).json()
+        #print(city_weather)
 
 
         data_object = {
@@ -82,6 +86,7 @@ def timezones(request):
             'name': name_data[i],
             'start_time': start_data[i],
             'end_time': end_data[i],
+            'id': timezones_id[i],
         }
         
         temperature_comparison = round(city_weather['main']['temp'])
@@ -120,6 +125,7 @@ def timezones(request):
     timezoneDTO = {
         'timezones': timezones_dto_data,
         'sunrise_sundown': sunrise_sundown_data,
+   
     }
 
     return render(request, 'timezones.html', timezoneDTO)
@@ -128,20 +134,33 @@ def timezones(request):
 
 class TimezonesCreate(CreateView):
     model = Timezones
-    fields = ['timezone', 'availability_start_time', 'availability_end_time', 'name', 'city']
+    fields = [ 'country', 'city' , 'timezone', 'availability_start_time', 'availability_end_time', 'name']
     success_url = '/timezones/'
 
     def form_valid(self, form):
         # Assign the logged in user (self.request.user)
-        form.instance.user = self.request.user  # form.instance is the cat
-    # Let the CreateView do its job as usual
+        form.instance.user = self.request.user  # form.instance is the timezone
+        # Let the CreateView do its job as usual
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["country_list"] = Country.objects.all()
+        return context
 
 
 
+class TimezonesDelete(DeleteView):
+    model = Timezones
+    success_url = '/timezones/'
 
 
-
+def timezones_detail(request, timezone_id):
+    timezone = Timezones.objects.get(id=timezone_id)
+    timezone_data = {
+        'timezone': timezone,
+    }
+    return render(request, 'timezones_detail.html', timezone_data)
 
 
