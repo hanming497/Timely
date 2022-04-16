@@ -1,13 +1,27 @@
 {% extends 'header.html' %}
-
 {% block content %}
-<h1>Delete Timezone</h1>
+{% load static %}
+<div class="login-wrapper">
 
-<h4>Are you sure you want to delete <span class="teal-text">{{ object.name }}</span>'s Timezone?</h4>
+    <div class="gradient-container-delete fade-in">
+        <h1>Delete Timezone</h1>
+        <h3 class="subheading-white">Are you sure you want to delete<br>
+            <span class="teal-text">{{ object.name }}</span>'s
+            Timezone?
+        </h3>
+        <div class="delete-window">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Yes, delete" class="btn-delete ">
+                <input type="hidden" name="next" value="{{ next }}">
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Yes - Delete!" class="btn">
-    <a href="{% url 'timezones' %}">Cancel</a>
-</form>
+            </form>
+            <a href="{% url 'timezones' %}">
+                <h3 class="subheading-white">No, cancel</h3>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 {% endblock %}

@@ -31,7 +31,9 @@
         {% for timezone in timezones %}
         {% if forloop.counter == 4 %}
         <div class="tile tile-weather">
-            <a href="{% url 'timezones_delete' timezone.id %}">X</a>
+            <a href="{% url 'timezones_delete' timezone.id %}">
+                <input type="button" name="closeMessage" value="×" id="closeMessage">
+            </a>
             <div class="timezone-content">
                 <div id="location">{{ timezone.city }}, {{ timezone.country }}
 
@@ -56,7 +58,9 @@
         </div>
         {% endif %}
         {% if forloop.counter <= 3 %} <div class="tile tile-weather">
-            <a href="{% url 'timezones_delete' timezone.id %}">X</a>
+            <a href="{% url 'timezones_delete' timezone.id %}">
+                <input type="button" name="closeMessage" value="×" id="closeMessage">
+            </a>
             <div class="timezone-content">
                 <div id="location">{{ timezone.city }}, {{ timezone.country }}</div>
                 <div id="user-time">
@@ -84,7 +88,7 @@
 
                     <h3 class="subheading">ADD A PERSON’S <br>TIMEZONE <br>AND
                         AVAILABILITY</h3>
-
+                    <img style="padding: 30px" src="{% static 'img/plus.svg' %}" alt="Plus sign">
                 </div>
             </div>
         </div>
@@ -100,6 +104,7 @@
 
                 <h3 class="subheading">ADD A PERSON’S <br>TIMEZONE <br>AND
                     AVAILABILITY</h3>
+                <img style="padding: 30px" src="{% static 'img/plus.svg' %}" alt="Plus sign">
 
             </div>
         </div>

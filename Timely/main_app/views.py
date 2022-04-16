@@ -8,7 +8,6 @@ from .forms import CityForm
 import pendulum
 
 
-
 from django.contrib.auth.forms import UserCreationForm
 # Add the following import
 
@@ -21,22 +20,22 @@ def home(request):
 
 
 def signup(request):
-  error_message = ''
-  if request.method == 'POST':
-    # This is how to create a 'user' form object
-    # that includes the data from the browser
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-      # This will add the user to the database
-      user = form.save()
-      
-      return redirect('/login')
-    else:
-      error_message = 'Invalid sign up - try again'
-  # A bad POST or a GET request, so render signup.html with an empty form
-  form = UserCreationForm()
-  context = {'form': form, 'error_message': error_message}
-  return render(request, 'registration/signup.html', context)
+    error_message = ''
+    if request.method == 'POST':
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # This will add the user to the database
+            user = form.save()
+
+            return redirect('/login')
+        else:
+            error_message = 'Invalid sign up - try again'
+    # A bad POST or a GET request, so render signup.html with an empty form
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
 
 
 def login(request):
@@ -45,15 +44,13 @@ def login(request):
 
 @login_required
 def timezones(request):
-    timezones = Timezones.objects.filter(user=request.user) #returns all timezones 
-
+    timezones = Timezones.objects.filter(
+        user=request.user)  # returns all timezones
 
     # Enter your API key here
     api_key = "ea43d349fe09f49a0d21b5607b77208c"
 
     url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=" + api_key
-
-    
 
     if request.method == 'POST':  # only true if form is submitted
         # add actual request data to form for processing
@@ -70,7 +67,7 @@ def timezones(request):
     country_code = []
     start_data = []
     end_data = []
-    sunrise_sundown_data = [100,50]
+    sunrise_sundown_data = [100, 50]
     timezones_id = []
 
     for timezone in timezones:
@@ -83,12 +80,11 @@ def timezones(request):
         timezones_id.append(timezone.id)
         country_code.append(timezone.country.country_short_name)
 
-    for i,city in enumerate(city_data):
+    for i, city in enumerate(city_data):
 
         # request the API data and convert the JSON to Python data types
         city_weather = requests.get(url.format(city, country_code[i])).json()
-        #print(city_weather)
-
+        # print(city_weather)
 
         data_object = {
             'city': city,
@@ -104,53 +100,51 @@ def timezones(request):
             'end_time': end_data[i],
             'id': timezones_id[i],
         }
-        
+
         temperature_comparison = round(city_weather['main']['temp'])
         feels_like_comparison = round(city_weather['main']['feels_like'])
 
         if temperature_comparison == feels_like_comparison:
-            data_object['feels_like'] = 'Feels similar to ' + str(temperature_comparison)
+            data_object['feels_like'] = 'Feels similar'
         elif temperature_comparison > feels_like_comparison:
-            data_object['feels_like'] =  'Feels cooler than ' + str(temperature_comparison)
+            data_object['feels_like'] = 'Feels cooler'
         elif temperature_comparison < feels_like_comparison:
-            data_object['feels_like'] = 'Feels warmer than '  + str(temperature_comparison)
-        
-        
+            data_object['feels_like'] = 'Feels warmer'
 
         timezones_dto_data.append(data_object),
- 
 
-    #for sunrise and sundown progressbar
-    #if timezones_data is not empty
+    # for sunrise and sundown progressbar
+    # if timezones_data is not empty
 
-    if timezones_data:    
+    if timezones_data:
         city_weather = requests.get(url.format(city_data[0])).json()
-        sr = pendulum.from_timestamp(city_weather['sys']['sunrise'], tz=timezones_data[0])
-        
-        sd = pendulum.from_timestamp(city_weather['sys']['sunset'], tz=timezones_data[0])
-        
+        sr = pendulum.from_timestamp(
+            city_weather['sys']['sunrise'], tz=timezones_data[0])
+
+        sd = pendulum.from_timestamp(
+            city_weather['sys']['sunset'], tz=timezones_data[0])
+
         curr = pendulum.now(timezones_data[0])
         total_diff = sd.diff(sr).in_hours()
         current_diff = sr.diff(curr).in_hours()
-        sunrise_sundown_data[0]=total_diff
-        sunrise_sundown_data[1]=current_diff
+        sunrise_sundown_data[0] = total_diff
+        sunrise_sundown_data[1] = current_diff
 
-
-    #creating timezoneDTO
+    # creating timezoneDTO
 
     timezoneDTO = {
         'timezones': timezones_dto_data,
         'sunrise_sundown': sunrise_sundown_data,
-   
+
     }
 
     return render(request, 'timezones.html', timezoneDTO)
 
 
-
 class TimezonesCreate(CreateView):
     model = Timezones
-    fields = [ 'country', 'city' , 'timezone', 'availability_start_time', 'availability_end_time', 'name']
+    fields = ['country', 'city', 'timezone',
+              'availability_start_time', 'availability_end_time', 'name']
     success_url = '/timezones/'
 
     def form_valid(self, form):
@@ -166,7 +160,6 @@ class TimezonesCreate(CreateView):
         return context
 
 
-
 class TimezonesDelete(DeleteView):
     model = Timezones
     success_url = '/timezones/'
@@ -178,5 +171,3 @@ def timezones_detail(request, timezone_id):
         'timezone': timezone,
     }
     return render(request, 'timezones_detail.html', timezone_data)
-
-
