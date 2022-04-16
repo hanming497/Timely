@@ -157,6 +157,7 @@ class TimezonesCreate(CreateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context["country_list"] = Country.objects.all()
+        context["timezone_list"] = iana_timezones.objects.all()
         return context
 
 
