@@ -25,21 +25,30 @@
         <!-- Add the login form -->
         <form method="post" action="{% url 'signup' %}">
           {% csrf_token %}
-          {{ form.as_p }}
-          <h3 class="subheading-white">Your Email</h3>
-          <input type="email" required id="email">
-          <h3 class="subheading-white">Current Location</h3>
-          <!--<input type="text" required id="current-location">-->
-          <select id="current-location" name="city">
-            <option value="Victoria">Victoria, BC</option>
-            <option value="Calgary">Calgary, AB</option>
-            <option value="Toronto">Toronto, ON</option>
-            <option value="London">London, UK</option>
-          </select>
+
+          {{ form.non_field_errors }}
+          <div class="fieldWrapper">
+            {{ form.username.errors }}
+            <label class="subheading-white" for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+          </div>
+          <div class="fieldWrapper">
+            {{ form.password1.errors }}
+            <label class="subheading-white" for="{{ form.password1.id_for_label }}">Password:</label>
+            {{ form.password1 }}
+          </div>
+          <div class="fieldWrapper">
+            {{ form.password2.errors }}
+            <label class="subheading-white" for="{{ form.password2.id_for_label }}">Password confirmation:</label>
+            {{ form.password2 }}
+          </div>
+
+
+          <input type="submit" class="btn" value="signup">
+          <input type="hidden" name="next" value="{{ next }}">
+        </form>
       </div>
-      <input type="submit" class="btn" value="signup">
-      <input type="hidden" name="next" value="{{ next }}">
-      </form>
+
     </div>
   </div>
 </div>

@@ -1,14 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import requests
-from django.urls.base import reverse
-
-from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import CityForm
 import pendulum
+
+
+
+from django.contrib.auth.forms import UserCreationForm
 # Add the following import
 
 
@@ -20,7 +21,22 @@ def home(request):
 
 
 def signup(request):
-    return render(request, 'registration/signup.html')
+  error_message = ''
+  if request.method == 'POST':
+    # This is how to create a 'user' form object
+    # that includes the data from the browser
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      # This will add the user to the database
+      user = form.save()
+      
+      return redirect('/login')
+    else:
+      error_message = 'Invalid sign up - try again'
+  # A bad POST or a GET request, so render signup.html with an empty form
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html', context)
 
 
 def login(request):
@@ -29,7 +45,7 @@ def login(request):
 
 @login_required
 def timezones(request):
-    timezones = Timezones.objects.all() #returns all timezones 
+    timezones = Timezones.objects.filter(user=request.user) #returns all timezones 
 
 
     # Enter your API key here
