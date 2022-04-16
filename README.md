@@ -2,12 +2,12 @@
 
 For everything beyond local. See weather and localised availablityfor collegues, business partners and loved ones. All at a glance.
 
-#Technologies used: 
+# Technologies used: 
 
 HTML, CSS, Python, Django
 
 
-#Screen Shots: 
+# Screen Shots: 
 ![image](https://user-images.githubusercontent.com/22383404/163689618-10199eb9-c50a-4c74-a2c6-dbb756bfff1f.png)
 ![image](https://user-images.githubusercontent.com/22383404/163689623-6657def5-a57f-47b1-b492-f568b3be0f5b.png)
 ![image](https://user-images.githubusercontent.com/22383404/163689658-360e6f64-0faf-42c3-854a-8f1365682afc.png)
