@@ -16,11 +16,12 @@
       </div>
     </div>
     <div class="gradient-container">
-      <h1>Let’s begin</h1>
+      <div class="gradient-container-error-header">
+        <h1>Let’s begin</h1>
+        {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+      </div>
       <div class="signup-form">
 
-
-        {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
 
         <!-- Add the login form -->
         <form method="post" action="{% url 'signup' %}">
@@ -29,28 +30,27 @@
           {{ form.non_field_errors }}
           <div class="fieldWrapper">
             {{ form.username.errors }}
-            <label class="subheading-white" for="{{ form.username.id_for_label }}">Username:</label>
+            <label class="subheading-white" for="{{ form.username.id_for_label }}">Username</label>
             {{ form.username }}
           </div>
           <div class="fieldWrapper">
             {{ form.password1.errors }}
-            <label class="subheading-white" for="{{ form.password1.id_for_label }}">Password:</label>
+            <label class="subheading-white" for="{{ form.password1.id_for_label }}">Password</label>
             {{ form.password1 }}
           </div>
           <div class="fieldWrapper">
             {{ form.password2.errors }}
-            <label class="subheading-white" for="{{ form.password2.id_for_label }}">Password confirmation:</label>
+            <label class="subheading-white" for="{{ form.password2.id_for_label }}">Retype Password</label>
             {{ form.password2 }}
           </div>
 
-
-          <input type="submit" class="btn" value="signup">
-          <input type="hidden" name="next" value="{{ next }}">
-        </form>
       </div>
+      <input type="submit" class="btn" value="Let's Go">
+      <input type="hidden" name="next" value="{{ next }}">
+      </form>
+
 
     </div>
   </div>
-</div>
 </div>
 {% endblock %}
